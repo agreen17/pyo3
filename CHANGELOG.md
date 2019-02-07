@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  * Renamed `add_function` to `add_wrapped` as it now also supports modules.
  * Renamed `#[pymodinit]` to `#[pymodule]`.
  * `init`, `init_ref` and `init_mut` now take a value instead of a function that returns the value and have to be called through `Py::new[_ref|_mut](py, ...)`. E.g. `py.init(|| SomeClass {})` becomes  `Py::new(py, SomeClass {})`.
+ * `PyRawObject::init` became infallible, e.g. it returns `()` instead of `PyResult<()>`.
  * Renamed `py_exception` to `create_exception` and refactored the error macros.
  * Renamed `wrap_function!` to `wrap_pyfunction!`
  * Migrated to the 2018 edition

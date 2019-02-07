@@ -166,38 +166,29 @@ impl<T> Py<T> {
 
 impl<T> Py<T>
 where
-    T: PyTypeCreate,
+    T: PyTypeCreate + PyTypeObject,
 {
     /// Create new instance of T and move it under python management
-    pub fn new(py: Python, value: T) -> PyResult<Py<T>>
-    where
-        T: PyTypeObject + PyTypeInfo,
-    {
-        let ob = <T as PyTypeCreate>::create(py)?;
-        ob.init(value)?;
+    pub fn new(py: Python, value: T) -> PyResult<Py<T>> {
+        let ob = T::create(py)?;
+        ob.init(value);
 
         let ob = unsafe { Py::from_owned_ptr(ob.into_ptr()) };
         Ok(ob)
     }
 
     /// Create new instance of `T` and move it under python management.
-    pub fn new_ref(py: Python, value: T) -> PyResult<&T>
-    where
-        T: PyTypeObject + PyTypeInfo,
-    {
-        let ob = <T as PyTypeCreate>::create(py)?;
-        ob.init(value)?;
+    pub fn new_ref(py: Python, value: T) -> PyResult<&T> {
+        let ob = T::create(py)?;
+        ob.init(value);
 
         unsafe { Ok(py.from_owned_ptr(ob.into_ptr())) }
     }
 
     /// Create new instance of `T` and move it under python management.
-    pub fn new_mut(py: Python, value: T) -> PyResult<&mut T>
-    where
-        T: PyTypeObject + PyTypeInfo,
-    {
-        let ob = <T as PyTypeCreate>::create(py)?;
-        ob.init(value)?;
+    pub fn new_mut(py: Python, value: T) -> PyResult<&mut T> {
+        let ob = T::create(py)?;
+        ob.init(value);
 
         unsafe { Ok(py.mut_from_owned_ptr(ob.into_ptr())) }
     }
