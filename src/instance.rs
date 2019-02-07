@@ -170,13 +170,12 @@ where
 {
     /// Create new instance of T and move it under python management
     /// Returns `Py<T>`.
-    pub fn new<F>(py: Python, f: F) -> PyResult<Py<T>>
+    pub fn new(py: Python, value: T) -> PyResult<Py<T>>
     where
-        F: FnOnce() -> T,
         T: PyTypeObject + PyTypeInfo,
     {
         let ob = <T as PyTypeCreate>::create(py)?;
-        ob.init(f)?;
+        ob.init(value)?;
 
         let ob = unsafe { Py::from_owned_ptr(ob.into_ptr()) };
         Ok(ob)
@@ -184,26 +183,24 @@ where
 
     /// Create new instance of `T` and move it under python management.
     /// Returns references to `T`
-    pub fn new_ref<F>(py: Python, f: F) -> PyResult<&T>
+    pub fn new_ref(py: Python, value: T) -> PyResult<&T>
     where
-        F: FnOnce() -> T,
         T: PyTypeObject + PyTypeInfo,
     {
         let ob = <T as PyTypeCreate>::create(py)?;
-        ob.init(f)?;
+        ob.init(value)?;
 
         unsafe { Ok(py.from_owned_ptr(ob.into_ptr())) }
     }
 
     /// Create new instance of `T` and move it under python management.
     /// Returns mutable references to `T`
-    pub fn new_mut<F>(py: Python, f: F) -> PyResult<&mut T>
+    pub fn new_mut(py: Python, value: T) -> PyResult<&mut T>
     where
-        F: FnOnce() -> T,
         T: PyTypeObject + PyTypeInfo,
     {
         let ob = <T as PyTypeCreate>::create(py)?;
-        ob.init(f)?;
+        ob.init(value)?;
 
         unsafe { Ok(py.mut_from_owned_ptr(ob.into_ptr())) }
     }

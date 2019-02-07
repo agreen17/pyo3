@@ -251,34 +251,31 @@ impl<'p> Python<'p> {
     /// Create new instance of `T` and move it under python management.
     /// Returns `Py<T>`.
     #[inline]
-    pub fn init<T, F>(self, f: F) -> PyResult<Py<T>>
+    pub fn init<T>(self, value: T) -> PyResult<Py<T>>
     where
-        F: FnOnce() -> T,
         T: PyTypeCreate,
     {
-        Py::new(self, f)
+        Py::new(self, value)
     }
 
     /// Create new instance of `T` and move it under python management.
     /// Created object get registered in release pool. Returns references to `T`
     #[inline]
-    pub fn init_ref<T, F>(self, f: F) -> PyResult<&'p T>
+    pub fn init_ref<T>(self, value: T) -> PyResult<&'p T>
     where
-        F: FnOnce() -> T,
         T: PyTypeCreate,
     {
-        Py::new_ref(self, f)
+        Py::new_ref(self, value)
     }
 
     /// Create new instance of `T` and move it under python management.
     /// Created object get registered in release pool. Returns mutable references to `T`
     #[inline]
-    pub fn init_mut<T, F>(self, f: F) -> PyResult<&'p mut T>
+    pub fn init_mut<T>(self, value: T) -> PyResult<&'p mut T>
     where
-        F: FnOnce() -> T,
         T: PyTypeCreate,
     {
-        Py::new_mut(self, f)
+        Py::new_mut(self, value)
     }
 }
 
