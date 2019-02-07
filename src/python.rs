@@ -5,10 +5,9 @@
 use crate::conversion::PyTryFrom;
 use crate::err::{PyDowncastError, PyErr, PyResult};
 use crate::ffi;
-use crate::instance::{AsPyRef, Py};
+use crate::instance::AsPyRef;
 use crate::object::PyObject;
 use crate::pythonrun::{self, GILGuard};
-use crate::typeob::PyTypeCreate;
 use crate::typeob::{PyTypeInfo, PyTypeObject};
 use crate::types::{PyDict, PyModule, PyObjectRef, PyType};
 use std::ffi::CString;
@@ -244,38 +243,6 @@ impl<'p> Python<'p> {
     #[inline]
     pub fn NotImplemented(self) -> PyObject {
         unsafe { PyObject::from_borrowed_ptr(self, ffi::Py_NotImplemented()) }
-    }
-}
-
-impl<'p> Python<'p> {
-    /// Create new instance of `T` and move it under python management.
-    /// Returns `Py<T>`.
-    #[inline]
-    pub fn init<T>(self, value: T) -> PyResult<Py<T>>
-    where
-        T: PyTypeCreate,
-    {
-        Py::new(self, value)
-    }
-
-    /// Create new instance of `T` and move it under python management.
-    /// Created object get registered in release pool. Returns references to `T`
-    #[inline]
-    pub fn init_ref<T>(self, value: T) -> PyResult<&'p T>
-    where
-        T: PyTypeCreate,
-    {
-        Py::new_ref(self, value)
-    }
-
-    /// Create new instance of `T` and move it under python management.
-    /// Created object get registered in release pool. Returns mutable references to `T`
-    #[inline]
-    pub fn init_mut<T>(self, value: T) -> PyResult<&'p mut T>
-    where
-        T: PyTypeCreate,
-    {
-        Py::new_mut(self, value)
     }
 }
 

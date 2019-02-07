@@ -23,7 +23,7 @@ fn instance_method() {
     let gil = Python::acquire_gil();
     let py = gil.python();
 
-    let obj = py.init_ref(InstanceMethod { member: 42 }).unwrap();
+    let obj = Py::new_ref(py, InstanceMethod { member: 42 }).unwrap();
     assert_eq!(obj.method().unwrap(), 42);
     let d = PyDict::new(py);
     d.set_item("obj", obj).unwrap();
@@ -50,7 +50,7 @@ fn instance_method_with_args() {
     let gil = Python::acquire_gil();
     let py = gil.python();
 
-    let obj = py.init_ref(InstanceMethodWithArgs { member: 7 }).unwrap();
+    let obj = Py::new_ref(py, InstanceMethodWithArgs { member: 7 }).unwrap();
     assert_eq!(obj.method(6).unwrap(), 42);
     let d = PyDict::new(py);
     d.set_item("obj", obj).unwrap();
@@ -219,7 +219,7 @@ impl MethArgs {
 fn meth_args() {
     let gil = Python::acquire_gil();
     let py = gil.python();
-    let inst = py.init(MethArgs {}).unwrap();
+    let inst = Py::new(py, MethArgs {}).unwrap();
 
     py_run!(py, inst, "assert inst.get_optional() == 10");
     py_run!(py, inst, "assert inst.get_optional(100) == 100");

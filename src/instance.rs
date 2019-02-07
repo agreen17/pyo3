@@ -169,7 +169,6 @@ where
     T: PyTypeCreate,
 {
     /// Create new instance of T and move it under python management
-    /// Returns `Py<T>`.
     pub fn new(py: Python, value: T) -> PyResult<Py<T>>
     where
         T: PyTypeObject + PyTypeInfo,
@@ -182,7 +181,6 @@ where
     }
 
     /// Create new instance of `T` and move it under python management.
-    /// Returns references to `T`
     pub fn new_ref(py: Python, value: T) -> PyResult<&T>
     where
         T: PyTypeObject + PyTypeInfo,
@@ -194,7 +192,6 @@ where
     }
 
     /// Create new instance of `T` and move it under python management.
-    /// Returns mutable references to `T`
     pub fn new_mut(py: Python, value: T) -> PyResult<&mut T>
     where
         T: PyTypeObject + PyTypeInfo,
